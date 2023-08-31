@@ -7,7 +7,7 @@ import { CalenderIcon } from "@/icons/CalenderIcon";
 import ServicesIcon from "@/icons/ServicesIcon";
 import { CustomersIcon } from "@/icons/CustomersIcon";
 
-export const Menu = ({ className }: { className: string }): JSX.Element => {
+export const Menu = ({ className }: { className?: string }): JSX.Element => {
   const menuItems = [
     {
       name: "Dashboard",
@@ -26,10 +26,10 @@ export const Menu = ({ className }: { className: string }): JSX.Element => {
     },
   ];
   return (
-    <>
+    <div>
       <div
         className={cn(
-          "flex w-[1442px] items-center justify-between px-64 py-6 relative bg-white border border-solid",
+          "flex w-[1442px] items-center justify-between px-64 py-6 bg-white",
           className
         )}
       >
@@ -74,6 +74,6 @@ export const Menu = ({ className }: { className: string }): JSX.Element => {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };

@@ -2,13 +2,13 @@ import CustomerSearch from "@/components/customer-search";
 import { Menu } from "@/components/navbar/menu";
 import NavTabs from "@/components/navtabs";
 import Pagination from "@/components/pagination";
-import { TableHead } from "@/components/table/thead";
+import CustomersTable from "@/components/table";
 
 export default function Page() {
   return (
     <>
-      <Menu className="absolute -left-px -top-px" />
-      <div className="flex w-[939px] items-end gap-[747px] absolute top-32 left-[251px]">
+      <Menu />
+      <div className="flex w-[939px] gap-[747px] relative my-8 left-[251px]">
         <div className="inline-flex flex-col items-start gap-4 relative flex-[0_0_auto]">
           <div className="w-[110px] -mt-px [font-family:'Matter-Medium',_Helvetica] font-medium text-selected text-xl tracking-[-0.40px] relative">
             Customers
@@ -19,21 +19,11 @@ export default function Page() {
         </div>
       </div>
       <NavTabs />
-      <div className="inline-flex flex-col items-end absolute top-[328px] left-[250px]">
-        <TableHead className="self-stretch w-full flex-[0_0_auto]" />
-        <div
-          className="
-        flex-[0_0_auto]
-        "
-        >
-          Hello
-          <div>
-            {/* <IconlyLightArrowLeft1 /> */}
-          </div>
-        </div>
-      </div>
       <CustomerSearch />
-      <Pagination />
+      <div className="flex my-8 w-[937px] flex-col items-center relative left-[250px]">
+        <CustomersTable />
+        <Pagination />
+      </div>
     </>
   );
 }

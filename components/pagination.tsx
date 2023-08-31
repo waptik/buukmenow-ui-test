@@ -5,7 +5,7 @@ import React from "react";
 const Pagination = () => {
   return (
     <div>
-      <div className="inline-flex items-start gap-2 absolute top-[832px] left-[955px]">
+      <div className="flex items-center my-8 gap-2 left-[955px]">
         <div className="flex w-8 h-8 rounded-[4px] items-center justify-center gap-2.5 relative">
           <LeftArrowIcon className="relative" />
         </div>

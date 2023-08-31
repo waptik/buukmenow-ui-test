@@ -13,11 +13,11 @@ const NavTabs = () => {
   ];
   return (
     <>
-      <div className="flex w-[942px] items-start gap-3 absolute top-[200px] left-[250px] border-b-[1.5px]">
+      <div className="flex w-[939px] gap-16 relative my-8 left-[250px] border-b-[1.5px]">
         {tabs.map((tab, i) => (
           <div
             key={i}
-            className={`inline-flex items-end gap-[10px] pt-0 pb-5 px-3 relative flex-[0_0_auto]${
+            className={`flex gap-2.5 pt-0 pb-5 relative ${
               tab.isSelected
                 ? " border-b-[1.5px] [border-bottom-style:solid] border-selected"
                 : ""
@@ -36,7 +36,7 @@ const NavTabs = () => {
             </div>
           </div>
         ))}
-        </div>
+      </div>
     </>
   );
 };
