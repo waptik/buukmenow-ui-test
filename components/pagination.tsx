@@ -1,11 +1,18 @@
 import { LeftArrowIcon } from "@/icons/LeftArrowIcon";
-import {  RightArrowIcon } from "@/icons/RightArrowIcon";
+import { RightArrowIcon } from "@/icons/RightArrowIcon";
 import React from "react";
 
-const Pagination = () => {
+export interface IPaginationProps {
+  setCursor?: (cursor: "next" | "previous") => void;
+  next?: string;
+  previous?: string;
+  total?: number;
+}
+
+const Pagination = (props?: IPaginationProps) => {
   return (
-    <div>
-      <div className="flex items-center my-8 gap-2 left-[955px]">
+    <>
+      <div className="flex items-center relative my-8 gap-2 left-[955px]">
         <div className="flex w-8 h-8 rounded-[4px] items-center justify-center gap-2.5 relative">
           <LeftArrowIcon className="relative" />
         </div>
@@ -35,7 +42,7 @@ const Pagination = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

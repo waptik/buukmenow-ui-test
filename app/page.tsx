@@ -1,7 +1,6 @@
 import CustomerSearch from "@/components/customer-search";
 import { Menu } from "@/components/navbar/menu";
 import NavTabs from "@/components/navtabs";
-import Pagination from "@/components/pagination";
 import CustomersTable from "@/components/table";
 
 export default function Page() {
@@ -20,10 +19,7 @@ export default function Page() {
       </div>
       <NavTabs />
       <CustomerSearch />
-      <div className="flex my-8 w-[937px] flex-col items-center relative left-[250px]">
-        <CustomersTable />
-        <Pagination />
-      </div>
+      <CustomersTable />
     </>
   );
 }
