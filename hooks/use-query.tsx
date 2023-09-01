@@ -1,3 +1,5 @@
+"use client";
+
 /* eslint-disable import/no-extraneous-dependencies */
 import { buildHTTPExecutor } from "@graphql-tools/executor-http";
 import { TypedDocumentNode } from "@graphql-typed-document-node/core";
@@ -24,10 +26,11 @@ export function useGraphQL<TResult, TVariables>(
   document: TypedDocumentNode<TResult, TVariables>,
   ...[variables]: TVariables extends Record<string, never> ? [] : [TVariables]
 ) {
+  console.log({ document, variables });
   return useSWR(
     [
       // This logic can be customized as desired
-      document.definitions.find(isOperationDefinition)?.name,
+      document?.definitions?.find(isOperationDefinition)?.name,
       variables,
     ] as const,
     async (_key: any, variables: any) =>

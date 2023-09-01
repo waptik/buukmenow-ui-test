@@ -1,10 +1,12 @@
 import { Types } from "mongoose";
+import { IPaginateOptions } from "typegoose-cursor-pagination";
 import {
   AddCampaignInput,
-  CampaignByIdInput,
   CampaignModel,
+  CampaignsArgs,
   UpdateCampaignInput,
 } from "../schemas/campaign.schema";
+import { SortDirection } from "../sort.enum";
 
 class CampaignService {
   create(input: AddCampaignInput) {
@@ -13,6 +15,29 @@ class CampaignService {
 
   findAll() {
     return CampaignModel.find().lean();
+  }
+
+  async findCampaigns(input: CampaignsArgs) {
+    const { orderBy, sortBy, search, ...data } = input;
+    const options: IPaginateOptions = {
+      ...data,
+      sortField: sortBy,
+      sortAscending: orderBy === SortDirection.ASC,
+    };
+    const result = await CampaignModel.findPaged(
+      options,
+      search
+        ? {
+            title: {
+              $regex: new RegExp(search.trim(), "i"),
+            },
+          }
+        : undefined
+    );
+
+    console.log("findCampaigns", result);
+
+    return result;
   }
 
   async findSingleCampaignById(id: Types.ObjectId) {

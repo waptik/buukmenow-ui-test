@@ -1,7 +1,9 @@
-import { getModelForClass, prop } from "@typegoose/typegoose";
-import { ObjectType, Field, InputType } from "type-graphql";
+import { getModelForClass, plugin, prop } from "@typegoose/typegoose";
+import { ObjectType, Field, InputType, ArgsType, Int } from "type-graphql";
 import { Types } from "mongoose";
 import { Base, TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
+import paginationPlugin, { PaginateModel } from "typegoose-cursor-pagination";
+import { SortDirection } from "../sort.enum";
 
 export interface CampaignType extends Base {
   _id: Types.ObjectId;
@@ -17,6 +19,30 @@ export interface CampaignType extends Base {
 export class CampaignByIdInput {
   @Field()
   _id: Types.ObjectId;
+}
+
+@ArgsType()
+export class CampaignsArgs {
+  @Field(() => String, { nullable: true, description: "What to search for" })
+  search?: string;
+
+  @Field(() => Int, { nullable: true, defaultValue: 10 })
+  limit?: number;
+
+  @Field(() => String, { nullable: true })
+  next?: string;
+
+  @Field(() => String, { nullable: true })
+  previous?: string;
+
+  @Field(() => String, { nullable: true, defaultValue: "createdAt" })
+  sortBy?: string;
+
+  @Field(() => SortDirection, {
+    nullable: true,
+    defaultValue: SortDirection.ASC,
+  })
+  orderBy?: SortDirection;
 }
 
 @InputType()
@@ -36,7 +62,6 @@ export class AddCampaignInput implements Partial<CampaignType> {
 
 @InputType()
 export class UpdateCampaignInput implements Partial<CampaignType> {
-  
   @Field({ nullable: true })
   title?: string;
 
@@ -51,6 +76,7 @@ export class UpdateCampaignInput implements Partial<CampaignType> {
 }
 
 @ObjectType()
+@plugin(paginationPlugin)
 export class Campaign extends TimeStamps {
   @Field(() => Types.ObjectId)
   readonly _id: Types.ObjectId;
@@ -80,6 +106,27 @@ export class Campaign extends TimeStamps {
   public createdAt?: Date;
 }
 
+@ObjectType()
+export class PaginatedCampaigns {
+  @Field(() => Boolean)
+  hasPrevious: boolean;
+
+  @Field(() => Boolean)
+  hasNext: boolean;
+
+  @Field(() => [Campaign])
+  docs: Campaign[];
+
+  @Field(() => Number)
+  totalDocs: number;
+
+  @Field(() => Number, { nullable: true })
+  next?: string;
+
+  @Field(() => Number, { nullable: true })
+  previous?: string;
+}
+
 export const CampaignModel = getModelForClass<typeof Campaign>(Campaign, {
   schemaOptions: { timestamps: true },
-});
+}) as unknown as PaginateModel<Campaign, typeof Campaign>;

@@ -1,9 +1,12 @@
 import { Types } from "mongoose";
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Args, Mutation, Query, Resolver } from "type-graphql";
 import { ObjectIdScalar } from "../scalars/objectid";
 import {
   AddCampaignInput,
-  Campaign, UpdateCampaignInput
+  Campaign,
+  CampaignsArgs,
+  PaginatedCampaigns,
+  UpdateCampaignInput,
 } from "../schemas";
 import { CampaignService } from "../services";
 
@@ -31,9 +34,16 @@ export default class CampaignResolver {
     return this.campaignService.findAndUpdate(id, data);
   }
 
-  @Query(() => [Campaign])
+  @Query(() => [Campaign], { description: "Get all campaigns" })
   async campaigns() {
     return this.campaignService.findAll();
+  }
+
+  @Query(() => PaginatedCampaigns, {
+    description: "Get all campaigns with pagination",
+  })
+  async allCampaigns(@Args() input: CampaignsArgs) {
+    return this.campaignService.findCampaigns(input);
   }
 
   @Query(() => Campaign || null)
