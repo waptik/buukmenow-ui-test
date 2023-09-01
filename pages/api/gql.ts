@@ -1,25 +1,12 @@
-import "reflect-metadata";
-import { startServerAndCreateNextHandler } from "@as-integrations/next";
-import { ApolloServer } from "@apollo/server";
-import { buildSchema } from "type-graphql";
-import { ObjectId } from "mongodb";
-import { TypegooseMiddleware } from "@gql/middleware/typegoose";
-import { ObjectIdScalar } from "@gql/scalars/objectid";
-import { CampaignResolver } from "@gql/resolvers";
 import { connectToMongo } from "@/lib/db";
+import { ApolloServer } from "@apollo/server";
+import { startServerAndCreateNextHandler } from "@as-integrations/next";
+import { schema } from "@gql/server/schema";
+import "reflect-metadata";
 
-async function createSchema() {
-  await connectToMongo();
-  return buildSchema({
-    resolvers: [CampaignResolver],
-    scalarsMap: [{ type: ObjectId, scalar: ObjectIdScalar }],
-    globalMiddlewares: [TypegooseMiddleware],
-    // validate: false,
-  });
-}
 
 async function createGqlServer() {
-  const schema = await createSchema();
+  await connectToMongo();
   const server = new ApolloServer({
     schema,
   });

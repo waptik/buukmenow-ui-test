@@ -32,9 +32,9 @@
       "@components/*": [
         "./components/*"
       ],
-      "@gql/*": [
-        "./gql/*"
-      ]
+      "@gql/server/*": ["./gql/server/*"],
+      "@gql/client": ["./gql/client/index.ts"],
+      "@gql/use-query": ["./hooks/use-query.ts"]
     },
     "forceConsistentCasingInFileNames": true
   },
