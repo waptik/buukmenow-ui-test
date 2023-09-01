@@ -7,7 +7,6 @@ import { TypegooseMiddleware } from "@gql/middleware/typegoose";
 import { ObjectIdScalar } from "@gql/scalars/objectid";
 import { CampaignResolver } from "@gql/resolvers";
 import { connectToMongo } from "@/lib/db";
-import path from "path";
 
 async function createSchema() {
   await connectToMongo();
@@ -16,7 +15,6 @@ async function createSchema() {
     scalarsMap: [{ type: ObjectId, scalar: ObjectIdScalar }],
     globalMiddlewares: [TypegooseMiddleware],
     // validate: false,
-    emitSchemaFile: path.join(__dirname, "..", "schema.graphql"),
   });
 }
 
