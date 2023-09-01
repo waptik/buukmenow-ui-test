@@ -1,0 +1,65 @@
+type Query {
+  """Get all campaigns with pagination"""
+  campaigns(
+    """What to search for"""
+    search: String
+    limit: Int = 10
+    next: String
+    previous: String
+    sortBy: String = "createdAt"
+    orderBy: SortDirection = ASC
+  ): PaginatedCampaigns!
+  campaign(id: ObjectId!): Campaign!
+}
+
+type PaginatedCampaigns {
+  hasPrevious: Boolean!
+  hasNext: Boolean!
+  docs: [Campaign!]!
+  totalDocs: Float!
+  next: Float
+  previous: Float
+}
+
+type Campaign {
+  _id: ObjectId!
+  title: String!
+  description: String!
+  group: String!
+  active: Boolean!
+  updatedAt: DateTimeISO!
+  createdAt: DateTimeISO!
+}
+
+"""Mongo object id scalar type"""
+scalar ObjectId
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
+"""
+scalar DateTimeISO
+
+"""All possible directions for sorting result"""
+enum SortDirection {
+  ASC
+  DESC
+}
+
+type Mutation {
+  addCampaign(input: AddCampaignInput!): Campaign!
+  updateCampaign(data: UpdateCampaignInput!, id: ObjectId!): Campaign!
+}
+
+input AddCampaignInput {
+  title: String!
+  description: String!
+  group: String!
+  active: Boolean!
+}
+
+input UpdateCampaignInput {
+  title: String
+  description: String
+  group: String
+  active: Boolean
+}

@@ -120,10 +120,10 @@ export class PaginatedCampaigns {
   @Field(() => Number)
   totalDocs: number;
 
-  @Field(() => Number, { nullable: true })
+  @Field(() => String, { nullable: true })
   next?: string;
 
-  @Field(() => Number, { nullable: true })
+  @Field(() => String, { nullable: true })
   previous?: string;
 }
 

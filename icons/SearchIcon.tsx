@@ -15,14 +15,14 @@ export function SearchIcon({ className }: { className?: string }) {
         cy="9.8055"
         r="7.49047"
         stroke="currentColor"
-        stroke-width="1.5"
+        strokeWidth="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
       <path
         d="M15.0153 15.4043L17.9519 18.3333"
         stroke="currentColor"
-        stroke-width="1.5"
+        strokeWidth="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
       />

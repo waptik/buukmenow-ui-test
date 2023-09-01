@@ -34,15 +34,10 @@ export default class CampaignResolver {
     return this.campaignService.findAndUpdate(id, data);
   }
 
-  @Query(() => [Campaign], { description: "Get all campaigns" })
-  async campaigns() {
-    return this.campaignService.findAll();
-  }
-
   @Query(() => PaginatedCampaigns, {
     description: "Get all campaigns with pagination",
   })
-  async allCampaigns(@Args() input: CampaignsArgs) {
+  async campaigns(@Args() input: CampaignsArgs) {
     return this.campaignService.findCampaigns(input);
   }
 

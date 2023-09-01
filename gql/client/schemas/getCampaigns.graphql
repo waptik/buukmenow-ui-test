@@ -1,0 +1,17 @@
+query getCampaigns($limit: Int, $search: String) {
+  campaigns(limit: $limit, search: $search) {
+    next
+    hasPrevious
+    hasNext
+    previous
+    totalDocs
+    docs {
+      _id
+      title
+      description
+      group
+      active
+    }
+  }
+}
+
