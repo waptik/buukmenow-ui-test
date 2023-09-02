@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const appUrl = process.env.NEXT_PUBLIC_VERCEL_ENV
-  ? `https://${process.env.APP_URL}`
+  ? `https://${process.env.NEXT_PUBLIC_APP_URL}`
   : "http://localhost:3000";
 
 export const gqlUrl = `${appUrl}/api/gql`;
