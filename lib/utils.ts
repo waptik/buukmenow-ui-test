@@ -6,8 +6,8 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const gqlApi = `${
-  process.env.NODE_ENV !== "development"
-    ? `https://${process.env.VERCEL_URL}`
+  process.env.NEXT_PUBLIC_VERCEL_ENV !== "development"
+    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
     : "http://localhost:3000"
 }/api/gql`;
 
