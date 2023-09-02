@@ -1,8 +1,10 @@
 "use client";
 
-import DocumentIcon from "@/icons/DocumentIcon";
+import { sdk } from "@/gql/client/hooks";
 import { SearchIcon } from "@/icons/SearchIcon";
-import React from "react";
+import { mutate } from "swr";
+import CampaignModal from "./campaign-modal";
+import { toast } from "./ui/use-toast";
 
 const CustomerSearch = () => {
   return (
@@ -30,15 +32,27 @@ const CustomerSearch = () => {
             </div>
           </button>
         </div>
-        <button
-          id="new-campaign"
-          className="inline-flex h-12 items-center justify-center gap-[10px] p-4 relative flex-[0_0_auto] bg-[#004741] rounded-[6px] border border-solid all-[unset] box-border"
-        >
-          <DocumentIcon className="relative w-5 h-5 mt-[-2.00px] mb-[-2.00px]" />
-          <div className="relative w-fit [font-family:'Matter-Medium',_Helvetica] font-medium text-white text-sm tracking-[-0.35px] whitespace-nowrap">
-            Create a campaign
-          </div>
-        </button>
+        <CampaignModal
+          onSave={async (d) => {
+            try {
+              await sdk.addCampaignMutation({
+                input: {
+                  ...d,
+                },
+              });
+              mutate("campaigns")
+              toast({
+                type: "background",
+                description: "Your campaign has been added succefully 🥳",
+              });
+            } catch (error) {
+              toast({
+                type: "background",
+                description: "Your campaign couldn't be added 😥",
+              });
+            }
+          }}
+        />
       </div>
     </>
   );

@@ -1,0 +1,11 @@
+mutation addCampaignMutation($input: AddCampaignInput!) {
+  addCampaign(input: $input) {
+    ...campaignFragment
+  }
+}
+
+mutation updateCampaignMutation($data: UpdateCampaignInput!, $updateCampaignId: ObjectId!){
+  updateCampaign(data: $data, id: $updateCampaignId) {
+    ...campaignFragment
+  }
+}

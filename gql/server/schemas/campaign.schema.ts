@@ -51,11 +51,11 @@ export class AddCampaignInput implements Partial<CampaignType> {
   group: string;
 
   @Field()
-  active: boolean;
+  status: string;
 }
 
 @InputType()
-export class UpdateCampaignInput implements Partial<CampaignType> {
+export class UpdateCampaignInput  {
   @Field({ nullable: true })
   title?: string;
 
@@ -66,7 +66,7 @@ export class UpdateCampaignInput implements Partial<CampaignType> {
   group?: string;
 
   @Field({ nullable: true })
-  active?: boolean;
+  status?: string;
 }
 
 @ObjectType()
