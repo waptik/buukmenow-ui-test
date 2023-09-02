@@ -6,10 +6,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const gqlApi = `${
-  process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}/api/gql`
+  process.env.VERCEL_ENV
+    ? `https://${process.env.VERCEL_URL}`
     : "http://localhost:3000"
 }/api/gql`;
 
-
-export const fetcher = (url: string) => fetch(url).then(res => res.json())
+export const fetcher = (url: string) => fetch(url).then((res) => res.json());
