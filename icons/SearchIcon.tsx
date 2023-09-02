@@ -16,15 +16,15 @@ export function SearchIcon({ className }: { className?: string }) {
         r="7.49047"
         stroke="currentColor"
         strokeWidth="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M15.0153 15.4043L17.9519 18.3333"
         stroke="currentColor"
         strokeWidth="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
