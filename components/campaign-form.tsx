@@ -26,7 +26,6 @@ import {
   CommandInput,
   CommandItem,
 } from "./ui/command";
-import { toast } from "./ui/use-toast";
 import { Textarea } from "./ui/textarea";
 
 const groups = [{ label: "All customers", value: "customers" }] as const;
@@ -53,6 +52,9 @@ const formSchema = z.object({
     }),
   description: z.string().min(10, {
     message: "Description must be at least 10 characters.",
+  })
+  .max(100, {
+    message: "Description must not be more than 100 characters.",
   }),
   group: z.string({
     required_error: "Please select a target group.",
@@ -94,7 +96,7 @@ const CampaignForm = ({
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Campaign title</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Write your campaign title here"
@@ -181,7 +183,7 @@ const CampaignForm = ({
             name="status"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Language</FormLabel>
+                <FormLabel>Campaign status</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -230,9 +232,6 @@ const CampaignForm = ({
                     </Command>
                   </PopoverContent>
                 </Popover>
-                <FormDescription>
-                  This is the language that will be used in the dashboard.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
