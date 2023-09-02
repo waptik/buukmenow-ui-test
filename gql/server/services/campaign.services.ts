@@ -18,13 +18,18 @@ class CampaignService {
   }
 
   async findCampaigns(input: CampaignsArgs) {
-    const { orderBy, sortBy, search, ...data } = input;
+    const { orderBy, sortBy, search, ...data } = input as CampaignsArgs & {
+      limit: number;
+    };
+
+    data.limit = data.limit > 0 ? (input.limit as number) : 10;
+
     const options: IPaginateOptions = {
       ...data,
       sortField: sortBy,
       sortAscending: orderBy === SortDirection.ASC,
     };
-    const result = await CampaignModel.findPaged(
+    const res = await CampaignModel.findPaged(
       options,
       search
         ? {
@@ -35,8 +40,27 @@ class CampaignService {
         : undefined
     );
 
-    console.log("findCampaigns", result);
+    console.log("findCampaigns", res);
+    const { docs, ...rest } = res as typeof res & {
+      hasNext: boolean;
+      hasPrevious: boolean;
+    };
 
+    const result = {
+      results: docs,
+      pagination: {
+        next: rest.hasNext ? rest.next : null,
+        previous: rest.hasPrevious ? rest.previous : null,
+        total: docs.length,
+        pages: data.limit > 0 ? Math.ceil(rest.totalDocs / data.limit) || 1 : 1,
+      },
+    };
+
+    console.log(
+      "findCampaigns.raw.limit",
+      Math.ceil(rest.totalDocs / data.limit)
+    );
+    console.log("findCampaigns.result", result);
     return result;
   }
 

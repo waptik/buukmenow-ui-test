@@ -20,13 +20,14 @@ const CustomersTable = ({ search }: { search?: string }) => {
     search,
   });
   const { data, error } = sdk.useGetCampaigns("campaigns", options);
-  const total = data?.campaigns.docs.length || 0;
+  const pagination = data?.campaigns.pagination;
+  const total = pagination?.total ?? 0;
   const isError = error ?? !data;
 
   return (
     <>
       <div className="flex my-8 w-[937px] items-center relative left-[250px]">
-        {(data?.campaigns.docs || []).length > 0 ? (
+        {(data?.campaigns.results || []).length > 0 ? (
           <div className="flex items-center flex-col">
             <p className="text-md text-black pb-8">
               {total} campaign{total > 1 ? "s" : ""} found
@@ -49,7 +50,7 @@ const CustomersTable = ({ search }: { search?: string }) => {
                 </tr>
               </thead>
               <tbody>
-                {data?.campaigns.docs.map((campaign, i) => (
+                {data?.campaigns.results.map((campaign, i) => (
                   <TableRowData key={i} campaign={campaign} />
                 ))}
               </tbody>
@@ -70,7 +71,7 @@ const CustomersTable = ({ search }: { search?: string }) => {
           </div>
         )}
       </div>
-      {total > 0 && (
+      {pagination && total > 0 && (
         <Pagination
           setCursor={(cursor) => {
             console.log("cursor", cursor);
@@ -78,17 +79,18 @@ const CustomersTable = ({ search }: { search?: string }) => {
               ...options,
               next:
                 cursor === "next"
-                  ? (data?.campaigns.next as string)
+                  ? (data?.campaigns.pagination.next as string)
                   : undefined,
               previous:
                 cursor === "previous"
-                  ? (data?.campaigns.previous as string)
+                  ? (data?.campaigns.pagination.previous as string)
                   : undefined,
             });
           }}
-          next={data?.campaigns.next as string}
-          previous={data?.campaigns.previous as string}
+          next={pagination.next as string}
+          previous={pagination.previous as string}
           total={total}
+          pages={pagination.pages}
         />
       )}
     </>

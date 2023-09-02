@@ -1,0 +1,16 @@
+fragment paginationFragment on Pagination {
+  total
+  pages
+  next
+  previous
+}
+
+fragment campaignFragment on Campaign {
+  _id
+  title
+  description
+  group
+  active
+  createdAt
+  updatedAt
+}

@@ -15,12 +15,6 @@ export interface CampaignType extends Base {
   createdAt?: string;
 }
 
-@InputType()
-export class CampaignByIdInput {
-  @Field()
-  _id: Types.ObjectId;
-}
-
 @ArgsType()
 export class CampaignsArgs {
   @Field(() => String, { nullable: true, description: "What to search for" })
@@ -106,25 +100,34 @@ export class Campaign extends TimeStamps {
   public createdAt?: Date;
 }
 
-@ObjectType()
-export class PaginatedCampaigns {
+@ObjectType({ description: "Pagination schema" })
+export class Pagination {
   @Field(() => Boolean)
   hasPrevious: boolean;
 
   @Field(() => Boolean)
   hasNext: boolean;
 
-  @Field(() => [Campaign])
-  docs: Campaign[];
+  @Field(() => Int)
+  total: number;
 
-  @Field(() => Number)
-  totalDocs: number;
+  @Field(() => Int)
+  pages: number;
 
   @Field(() => String, { nullable: true })
   next?: string;
 
   @Field(() => String, { nullable: true })
   previous?: string;
+}
+
+@ObjectType({ description: "Paginated campaigns schema" })
+export class PaginatedCampaigns {
+  @Field(() => Pagination)
+  pagination: Pagination;
+
+  @Field(() => [Campaign])
+  results: Campaign[];
 }
 
 export const CampaignModel = getModelForClass<typeof Campaign>(Campaign, {

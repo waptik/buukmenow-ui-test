@@ -13,12 +13,18 @@ type Query {
 }
 
 type PaginatedCampaigns {
+  pagination: Pagination!
+  results: [Campaign!]!
+}
+
+"""Pagination structure"""
+type Pagination {
   hasPrevious: Boolean!
   hasNext: Boolean!
-  docs: [Campaign!]!
-  totalDocs: Float!
-  next: Float
-  previous: Float
+  total: Int!
+  pages: Int!
+  next: String
+  previous: String
 }
 
 type Campaign {

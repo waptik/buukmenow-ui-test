@@ -31,6 +31,9 @@ export default class CampaignResolver {
     @Arg("data", () => UpdateCampaignInput)
     data: UpdateCampaignInput
   ) {
+    if (!id) {
+      throw new Error("An id is required to update a campaign");
+    }
     return this.campaignService.findAndUpdate(id, data);
   }
 
@@ -46,13 +49,18 @@ export default class CampaignResolver {
     @Arg("id", () => ObjectIdScalar)
     id: Types.ObjectId
   ) {
+    if (!id) {
+      throw new Error("An id is required to find a campaign");
+    }
+
     try {
       const campaign = await this.campaignService.findSingleCampaignById(id);
       return campaign;
     } catch (e) {
-      console.error(e);
+      const error = e as Error;
+      console.error(error);
 
-      return null;
+      return error.message;
     }
   }
 }

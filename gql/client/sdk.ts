@@ -1,6 +1,7 @@
 import { GraphQLClient } from 'graphql-request';
-import { ClientError, GraphQLClientRequestHeaders } from 'graphql-request/build/cjs/types';
+import { GraphQLClientRequestHeaders } from 'graphql-request/build/cjs/types';
 import gql from 'graphql-tag';
+import { ClientError } from 'graphql-request/dist/types';
 import useSWR, { SWRConfiguration as SWRConfigInterface, Key as SWRKeyInterface } from 'swr';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -55,14 +56,22 @@ export type MutationUpdateCampaignArgs = {
   id: Scalars['ObjectId']['input'];
 };
 
+/** Paginated campaigns schema */
 export type PaginatedCampaigns = {
   __typename?: 'PaginatedCampaigns';
-  docs: Array<Campaign>;
+  pagination: Pagination;
+  results: Array<Campaign>;
+};
+
+/** Pagination schema */
+export type Pagination = {
+  __typename?: 'Pagination';
   hasNext: Scalars['Boolean']['output'];
   hasPrevious: Scalars['Boolean']['output'];
   next?: Maybe<Scalars['String']['output']>;
+  pages: Scalars['Int']['output'];
   previous?: Maybe<Scalars['String']['output']>;
-  totalDocs: Scalars['Float']['output'];
+  total: Scalars['Int']['output'];
 };
 
 export type Query = {
@@ -103,30 +112,63 @@ export type UpdateCampaignInput = {
 export type GetCampaignsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
+  next?: InputMaybe<Scalars['String']['input']>;
+  previous?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetCampaignsQuery = { __typename?: 'Query', campaigns: { __typename?: 'PaginatedCampaigns', next?: string | null, hasPrevious: boolean, hasNext: boolean, previous?: string | null, totalDocs: number, docs: Array<{ __typename?: 'Campaign', _id: any, title: string, description: string, group: string, active: boolean }> } };
+export type GetCampaignsQuery = { __typename?: 'Query', campaigns: { __typename?: 'PaginatedCampaigns', pagination: { __typename?: 'Pagination', total: number, pages: number, next?: string | null, previous?: string | null }, results: Array<{ __typename?: 'Campaign', _id: any, title: string, description: string, group: string, active: boolean, createdAt: any, updatedAt: any }> } };
+
+export type GetCampaignQueryVariables = Exact<{
+  campaignId: Scalars['ObjectId']['input'];
+}>;
 
 
+export type GetCampaignQuery = { __typename?: 'Query', campaign: { __typename?: 'Campaign', _id: any, title: string, description: string, group: string, active: boolean, createdAt: any, updatedAt: any } };
+
+export type PaginationFragmentFragment = { __typename?: 'Pagination', total: number, pages: number, next?: string | null, previous?: string | null };
+
+export type CampaignFragmentFragment = { __typename?: 'Campaign', _id: any, title: string, description: string, group: string, active: boolean, createdAt: any, updatedAt: any };
+
+export const PaginationFragmentFragmentDoc = gql`
+    fragment paginationFragment on Pagination {
+  total
+  pages
+  next
+  previous
+}
+    `;
+export const CampaignFragmentFragmentDoc = gql`
+    fragment campaignFragment on Campaign {
+  _id
+  title
+  description
+  group
+  active
+  createdAt
+  updatedAt
+}
+    `;
 export const GetCampaignsDocument = gql`
-    query getCampaigns($limit: Int, $search: String) {
-  campaigns(limit: $limit, search: $search) {
-    next
-    hasPrevious
-    hasNext
-    previous
-    totalDocs
-    docs {
-      _id
-      title
-      description
-      group
-      active
+    query getCampaigns($limit: Int, $search: String, $next: String, $previous: String) {
+  campaigns(limit: $limit, search: $search, next: $next, previous: $previous) {
+    pagination {
+      ...paginationFragment
+    }
+    results {
+      ...campaignFragment
     }
   }
 }
-    `;
+    ${PaginationFragmentFragmentDoc}
+${CampaignFragmentFragmentDoc}`;
+export const GetCampaignDocument = gql`
+    query getCampaign($campaignId: ObjectId!) {
+  campaign(id: $campaignId) {
+    ...campaignFragment
+  }
+}
+    ${CampaignFragmentFragmentDoc}`;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -137,6 +179,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
   return {
     getCampaigns(variables?: GetCampaignsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetCampaignsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetCampaignsQuery>(GetCampaignsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getCampaigns', 'query');
+    },
+    getCampaign(variables: GetCampaignQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetCampaignQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCampaignQuery>(GetCampaignDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getCampaign', 'query');
     }
   };
 }
@@ -147,6 +192,9 @@ export function getSdkWithHooks(client: GraphQLClient, withWrapper: SdkFunctionW
     ...sdk,
     useGetCampaigns(key: SWRKeyInterface, variables?: GetCampaignsQueryVariables, config?: SWRConfigInterface<GetCampaignsQuery, ClientError>) {
       return useSWR<GetCampaignsQuery, ClientError>(key, () => sdk.getCampaigns(variables), config);
+    },
+    useGetCampaign(key: SWRKeyInterface, variables: GetCampaignQueryVariables, config?: SWRConfigInterface<GetCampaignQuery, ClientError>) {
+      return useSWR<GetCampaignQuery, ClientError>(key, () => sdk.getCampaign(variables), config);
     }
   };
 }

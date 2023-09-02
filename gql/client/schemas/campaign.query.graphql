@@ -1,0 +1,17 @@
+query getCampaigns($limit: Int, $search: String, $next: String, $previous: String) {
+  campaigns(limit: $limit, search: $search, next: $next, previous: $previous) {
+    pagination {
+      ...paginationFragment
+    }
+    results {
+      ...campaignFragment
+    }
+  }
+}
+
+
+query getCampaign($campaignId: ObjectId!){
+  campaign(id: $campaignId) {
+    ...campaignFragment
+  }
+}
