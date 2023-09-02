@@ -10,7 +10,11 @@ import { SortDirection } from "../sort.enum";
 
 class CampaignService {
   create(input: AddCampaignInput) {
-    return CampaignModel.create(input);
+    const { status, ...rest } = input;
+    return CampaignModel.create({
+      ...rest,
+      active: status === "active" ? true : false,
+    });
   }
 
   findAll() {
@@ -40,7 +44,6 @@ class CampaignService {
         : undefined
     );
 
-    console.log("findCampaigns", res);
     const { docs, ...rest } = res as typeof res & {
       hasNext: boolean;
       hasPrevious: boolean;
@@ -56,11 +59,6 @@ class CampaignService {
       },
     };
 
-    console.log(
-      "findCampaigns.raw.limit",
-      Math.ceil(rest.totalDocs / data.limit)
-    );
-    console.log("findCampaigns.result", result);
     return result;
   }
 
@@ -74,10 +72,18 @@ class CampaignService {
     return campaign;
   }
 
-  async findAndUpdate(input: Types.ObjectId, data: UpdateCampaignInput) {
-    const campaign = await CampaignModel.findOneAndUpdate(input, data, {
-      new: true,
-    });
+  async findAndUpdate(id: Types.ObjectId, data: UpdateCampaignInput) {
+    const { status, ...rest } = data;
+    const campaign = await CampaignModel.findOneAndUpdate(
+      id,
+      {
+        ...rest,
+        active: status ? (status === "active" ? true : false) : false,
+      },
+      {
+        new: true,
+      }
+    );
 
     if (!campaign) {
       throw new Error("Invalid campaign id");

@@ -16,7 +16,7 @@ interface IOptions {
 
 const CustomersTable = ({ search }: { search?: string }) => {
   const [options, setOptions] = useState<IOptions>({
-    limit: 2,
+    limit: 10,
     search,
   });
   const { data, error } = sdk.useGetCampaigns("campaigns", options);
