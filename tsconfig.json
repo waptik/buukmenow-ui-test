@@ -34,7 +34,7 @@
       ],
       "@gql/server/*": ["./gql/server/*"],
       "@gql/client": ["./gql/client/index.ts"],
-      "@gql/use-query": ["hooks/use-query.tsx"],
+      "@gql/use-query": ["./hooks/use-query.tsx"],
       "@gql/hooks": ["./gql/client/hooks.tsx"],
     },
     "forceConsistentCasingInFileNames": true
