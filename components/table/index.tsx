@@ -19,8 +19,9 @@ const CustomersTable = ({ search }: { search?: string }) => {
     limit: 2,
     search,
   });
-  const { data } = sdk.useGetCampaigns("campaigns", options);
+  const { data, error } = sdk.useGetCampaigns("campaigns", options);
   const total = data?.campaigns.docs.length || 0;
+  const isError = error ?? !data;
 
   return (
     <>
@@ -56,27 +57,40 @@ const CustomersTable = ({ search }: { search?: string }) => {
           </div>
         ) : (
           <div className="flex justify-center items-center">
-            <p className="text-2xl text-gray-400">No campaigns found</p>
+            <p className="text-2xl">
+              {isError ? (
+                <span className="text-red-500">
+                  <span className="text-gray-400">Error: </span>-{" "}
+                  {error?.message || "Something went wrong"}
+                </span>
+              ) : (
+                <span className="text-gray-400">No campaigns found</span>
+              )}
+            </p>
           </div>
         )}
       </div>
-      <Pagination
-        setCursor={(cursor) => {
-          console.log("cursor", cursor);
-          setOptions({
-            ...options,
-            next:
-              cursor === "next" ? (data?.campaigns.next as string) : undefined,
-            previous:
-              cursor === "previous"
-                ? (data?.campaigns.previous as string)
-                : undefined,
-          });
-        }}
-        next={data?.campaigns.next as string}
-        previous={data?.campaigns.previous as string}
-        total={total}
-      />
+      {total > 0 && (
+        <Pagination
+          setCursor={(cursor) => {
+            console.log("cursor", cursor);
+            setOptions({
+              ...options,
+              next:
+                cursor === "next"
+                  ? (data?.campaigns.next as string)
+                  : undefined,
+              previous:
+                cursor === "previous"
+                  ? (data?.campaigns.previous as string)
+                  : undefined,
+            });
+          }}
+          next={data?.campaigns.next as string}
+          previous={data?.campaigns.previous as string}
+          total={total}
+        />
+      )}
     </>
   );
 };
